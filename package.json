@@ -1,0 +1,22 @@
+{
+  "name": "mini-jeu-ceri",
+  "version": "1.0.0",
+  "description": "Salut!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sozary/Mini-jeu-Ceri.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sozary/Mini-jeu-Ceri/issues"
+  },
+  "homepage": "https://github.com/Sozary/Mini-jeu-Ceri#readme",
+  "dependencies": {
+    "phaser": "^3.15.1"
+  }
+}
