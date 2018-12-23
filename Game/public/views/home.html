@@ -1,43 +1,26 @@
-<script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
-
-<div ng-include="'views/menu.html'"></div>
-<md-content flex layout-padding>
+<div ng-include="'views/menu.html'">
+</div>
+<style>
+  #game-app {
+    border-radius: 8px;
+    margin: 20px;
+    box-shadow: 0 0 0 10px hsl(0, 0%, 80%),
+    0 0 0 15px hsl(0, 0%, 90%);
+  }
+</style>
+<md-content>
   <div layout="column" layout-align="top center">
     <div layout="row" layout-wrap>
       <h2>Game</h2>
     </div>
+  </div>
+
+  <div layout="column" layout-align="top center">
+    <div id="game-app"></div>
   </div>
 </md-content>
 
 <script type="text/javascript ">
   NProgress.start();
   NProgress.done();
-
-  var config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    scene: {
-      preload: preload,
-      create: create,
-      update: update
-    }
-  };
-
-  var game = new Phaser.Game(config);
-
-  function preload() {
-    this.load.setBaseURL('http://127.0.0.1:8080/');
-
-    this.load.image('bottom_left', 'Game/images/bl.png');
-    this.load.image('bottom_right', 'Game/images/br.png');
-    this.load.image('upper_left', 'Game/images/ul.png');
-    this.load.image('upper_right', 'Game/images/ur.png');
-  }
-
-  function create() {
-    this.add.image(400, 300, 'bottom_left')
-  }
-
-  function update() {}
 </script>
