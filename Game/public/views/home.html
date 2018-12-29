@@ -1,0 +1,40 @@
+<div ng-include="'views/menu.html'">
+</div>
+<style>
+  #game-app {
+    border-radius: 8px;
+    margin: 20px;
+    box-shadow: 0 0 0 10px hsl(0, 0%, 80%),
+    0 0 0 15px hsl(0, 0%, 90%);
+  }
+</style>
+<md-content>
+  <div layout="row" layout-align="center center">
+    <h2>Game</h2>
+  </div>
+
+  <div layout="row" layout-align="center center">
+    <div flex="30">
+      <div layout="column" layout-align="center center">
+        <div flex="80">
+          <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Ordre d'arrivé</th>
+                <th scope="col">Joueur</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div flex="70">
+      <div id="game-app"></div>
+    </div>
+  </div>
+</md-content>
+
+<script type="text/javascript ">
+  NProgress.start();
+  NProgress.done();
+</script>
