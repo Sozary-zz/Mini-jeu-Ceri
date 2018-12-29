@@ -32,7 +32,21 @@ app.use(function(req, res, next) {
   );
   next();
 });
-
+io.on('connection', function(socket) {
+  socket.on('new_connection', function(data) {
+    socket.emit("need_user_name")
+  });
+  socket.on("given_user", (data) => {
+    console.log(data.user + " received");
+    // actions with db with callback
+    socket.emit("user_ok", {
+      username: data.user
+    })
+  })
+  socket.on('challenge', function(data) {
+    socket.broadcast.emit('newChallenge', data);
+  });
+});
 
 app.post('/new', function(req, res) {
   // MongoClient.connect(mongoUrl, function(err, client) {       

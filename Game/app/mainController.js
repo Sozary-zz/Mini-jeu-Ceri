@@ -17,9 +17,36 @@ mainApp.controller('menuCtrl', function($scope, $http, $location, $mdToast) {
     link: "#!/home"
   }]
 })
+mainApp.controller('indexCtrl', function($scope, $mdDialog, $http, $location, $mdToast) {
+  var self = this
+  $scope.promptUsername = function() {
+    var confirm = $mdDialog.prompt()
+      .title('Identifiant')
+      .textContent('Quel identifiant voulez-vous choisir pour ce jeu?')
+      .placeholder('Indentifiant')
+      .required(true)
+      .ok('Valider')
+      .cancel('Je suis anonyme!')
+
+    $mdDialog.show(confirm).then(function(result) {
+      socket.emit("given_user", {
+        user: result
+      })
+    }, function() {
+      window.location.href = "http://localhost:8080/"
+
+    });
+  }
+})
 
 mainApp.controller('homeCtrl', function($scope, $http, $location, $mdSidenav, $mdToast) {
   $scope.toggleSidenav = buildToggler('closeEventsDisabled');
+  $scope.user = {}
+  socket.on('user_ok', (data) => {
+    $scope.user.name = data.username;
+    $scope.$apply();
+  });
+
   var config = {
     type: Phaser.AUTO,
     width: $(window).width() * .7,

@@ -1,4 +1,4 @@
-<html lang="en" ng-app="mainApp">
+<html lang="en" ng-app="mainApp" ng-controller="indexCtrl">
 
 <head>
   <meta charset="UTF-8">
@@ -37,9 +37,17 @@
   </script>
 
 
-
   <script src="app/mainController.js" charset="utf-8"></script>
+  <script src="app/components/team.js" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+  <script>
+    var socket = io.connect('http://localhost:8080/');
+    socket.emit('new_connection');
 
+    socket.on('need_user_name', () => {
+      angular.element('html[ng-controller="indexCtrl"]').scope().promptUsername();
+    });
+  </script>
   <script type="text/javascript">
     NProgress.configure({
       template: '<div class="bar" role="bar"><div class="peg"></div></div>',
