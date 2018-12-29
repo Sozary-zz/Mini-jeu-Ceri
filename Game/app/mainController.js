@@ -22,24 +22,29 @@ mainApp.controller('homeCtrl', function($scope, $http, $location, $mdSidenav, $m
   $scope.toggleSidenav = buildToggler('closeEventsDisabled');
   var config = {
     type: Phaser.AUTO,
-    width: 800,
+    width: $(window).width() * .7,
     parent: 'game-app',
-    height: 600,
+    height: $(window).width() * .4,
     scene: {
       preload: preload,
       create: create,
       update: update
     }
   };
+  console.log();
   var game = new Phaser.Game(config);
 
   function preload() {
     this.load.setBaseURL('http://127.0.0.1:8081');
-    // http-server Game/images --cors //
+    // http-server Game/images --cors
     this.load.image('bottom_left', 'bl.png');
     this.load.image('bottom_right', 'br.png');
     this.load.image('upper_left', 'ul.png');
     this.load.image('upper_right', 'ur.png');
+    this.load.image('eevee', 'eevee.png');
+    this.load.image('pikachu', 'pikachu.png');
+    this.load.image('jigglypuff', 'jigglypuff.png');
+    this.load.image('squirtle', 'squirtle.png');
     this.load.image('sky', 'gradient1.png');
   }
 

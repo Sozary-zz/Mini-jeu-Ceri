@@ -9,14 +9,28 @@
   }
 </style>
 <md-content>
-  <div layout="column" layout-align="top center">
-    <div layout="row" layout-wrap>
-      <h2>Game</h2>
-    </div>
+  <div layout="row" layout-align="center center">
+    <h2>Game</h2>
   </div>
 
-  <div layout="column" layout-align="top center">
-    <div id="game-app"></div>
+  <div layout="row" layout-align="center center">
+    <div flex="30">
+      <div layout="column" layout-align="center center">
+        <div flex="80">
+          <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Ordre d'arrivé</th>
+                <th scope="col">Joueur</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div flex="70">
+      <div id="game-app"></div>
+    </div>
   </div>
 </md-content>
 

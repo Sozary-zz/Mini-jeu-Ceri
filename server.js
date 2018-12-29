@@ -10,7 +10,10 @@ const http = require("http");
 // Declaration des variables
 const port = "8080";
 
-app.listen(port, () => console.log(`App launched on ${port}`))
+const server = http.createServer({}, app).listen(port, function() {
+  console.log(`App launched on ${port}`);
+});
+const io = require("socket.io")(server);
 
 app.use("/css", express.static(__dirname + "/Game/css"));
 app.use("/images", express.static(__dirname + "/Game/images"));
