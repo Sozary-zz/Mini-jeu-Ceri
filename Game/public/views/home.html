@@ -16,15 +16,18 @@
     <h4>{{user.name}}</h4>
   </div>
   <div layout="row" layout-align="center center">
+    <img src="./images/{{user.avatar}}.png" alt="">
+  </div>
+  <div layout="row" layout-align="center center">
     <div flex="20">
-      <team>
+      <team user="">
       </team>
     </div>
     <div flex="60">
       <div id="game-app"></div>
     </div>
     <div flex="20">
-      <team></team>
+      <team user=""></team>
     </div>
   </div>
 </md-content>

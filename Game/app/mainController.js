@@ -51,7 +51,7 @@ mainApp.controller('homeCtrl', function($scope, $http, $location, $mdSidenav, $m
   $scope.toggleSidenav = buildToggler('closeEventsDisabled');
   $scope.user = {}
   socket.on('user_ok', (data) => {
-    $scope.user.name = data.username;
+    $scope.user = data;
     $scope.$apply();
   });
 

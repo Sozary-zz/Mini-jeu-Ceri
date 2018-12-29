@@ -14,6 +14,13 @@ const server = http.createServer({}, app).listen(port, function() {
   console.log(`App launched on ${port}`);
 });
 const io = require("socket.io")(server);
+var gameRoom = []
+var availableAvatar = [
+  "jigglypuff",
+  "pikachu",
+  "squirtle",
+  "eevee"
+]
 
 app.use("/css", express.static(__dirname + "/Game/css"));
 app.use("/images", express.static(__dirname + "/Game/images"));
@@ -44,16 +51,21 @@ io.on('connection', function(socket) {
       })
     })
   });
+  // socket.on('disconnect', () => {
+  //   clients = clients.filter(id => id !== socket.id)
+  // })
   socket.on("given_user", (data) => {
-    console.log(data.user + " received");
+    let newUser = {
+      name: data.user,
+      avatar: availableAvatar.splice(Math.floor(Math.random() * Math.floor(availableAvatar.length)), 1)[0]
+    }
+    gameRoom.push(newUser)
     //    actions with db then callback
     MongoClient.connect(mongoUrl, function(err, client) {  
       client.db("cerigame").collection("players").insertOne({
         "username": data.user,
       }, () => {
-        socket.emit("user_ok", {
-          username: data.user
-        })
+        socket.emit("user_ok", newUser)
       })
     });         
   })

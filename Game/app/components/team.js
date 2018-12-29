@@ -13,7 +13,8 @@ mainApp.component('team', {
     this.players = [];
 
     this.addPlayer = function() {
-
+      console.log($rootScope);
+      // this.players.push()
     }
   }
 });
