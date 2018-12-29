@@ -19,6 +19,14 @@ mainApp.controller('menuCtrl', function($scope, $http, $location, $mdToast) {
 })
 mainApp.controller('indexCtrl', function($scope, $mdDialog, $http, $location, $mdToast) {
   var self = this
+  $scope.tooMuchUser = function() {
+    var confirm = $mdDialog.alert()
+      .clickOutsideToClose(false)
+      .title('Une erreur est survenue')
+      .textContent('Trop de joueurs sont connectés simultanément, veuillez revenir plus tard.')
+      .ok('Ça marche!')
+    $mdDialog.show(confirm).then(function() {}, function() {});
+  }
   $scope.promptUsername = function() {
     var confirm = $mdDialog.prompt()
       .title('Identifiant')

@@ -34,14 +34,28 @@ app.use(function(req, res, next) {
 });
 io.on('connection', function(socket) {
   socket.on('new_connection', function(data) {
-    socket.emit("need_user_name")
+    MongoClient.connect(mongoUrl, function(err, client) {  
+      client.db("cerigame").collection("players").count({}, function(error, numOfPlayers) {
+        if (error) throw error;
+        if (numOfPlayers < 4)
+          socket.emit("need_user_name")
+        else
+          socket.emit("too_much_user")
+      })
+    })
   });
   socket.on("given_user", (data) => {
     console.log(data.user + " received");
-    // actions with db with callback
-    socket.emit("user_ok", {
-      username: data.user
-    })
+    //    actions with db then callback
+    MongoClient.connect(mongoUrl, function(err, client) {  
+      client.db("cerigame").collection("players").insertOne({
+        "username": data.user,
+      }, () => {
+        socket.emit("user_ok", {
+          username: data.user
+        })
+      })
+    });         
   })
   socket.on('challenge', function(data) {
     socket.broadcast.emit('newChallenge', data);

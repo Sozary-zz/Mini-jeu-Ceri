@@ -47,6 +47,9 @@
     socket.on('need_user_name', () => {
       angular.element('html[ng-controller="indexCtrl"]').scope().promptUsername();
     });
+    socket.on('too_much_user', () => {
+      angular.element('html[ng-controller="indexCtrl"]').scope().tooMuchUser();
+    });
   </script>
   <script type="text/javascript">
     NProgress.configure({
