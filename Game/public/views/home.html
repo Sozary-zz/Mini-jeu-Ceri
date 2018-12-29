@@ -14,22 +14,13 @@
   </div>
 
   <div layout="row" layout-align="center center">
-    <div flex="30">
-      <div layout="column" layout-align="center center">
-        <div flex="80">
-          <table class="table">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">Ordre d'arrivé</th>
-                <th scope="col">Joueur</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-      </div>
+    <div flex="10">
     </div>
-    <div flex="70">
+    <div flex="80">
       <div id="game-app"></div>
+    </div>
+    <div flex="10">
+
     </div>
   </div>
 </md-content>
@@ -38,3 +29,9 @@
   NProgress.start();
   NProgress.done();
 </script>
+
+<style media="screen">
+  .little-btn {
+    transform: scale(.8)
+  }
+</style>
