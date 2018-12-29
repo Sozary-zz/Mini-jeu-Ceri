@@ -1,4 +1,4 @@
-** Run the app **
+# Run the app
 
 In order the run the app, please write the following commands in your terminal:
 
