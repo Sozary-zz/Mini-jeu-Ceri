@@ -20,14 +20,14 @@
   </div>
   <div layout="row" layout-align="center center">
     <div flex="20">
-      <team user="user">
+      <team user="user" on-join="joinATeam()" joined="aJoined">
       </team>
     </div>
     <div flex="60">
       <div id="game-app"></div>
     </div>
     <div flex="20">
-      <team user="user"></team>
+      <team user="user" on-join="joinBTeam()" joined="bJoined"></team>
     </div>
   </div>
 </md-content>

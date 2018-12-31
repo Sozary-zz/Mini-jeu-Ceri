@@ -54,6 +54,8 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
     $scope.user = data;
     $scope.$apply();
   });
+  $scope.aJoined = false
+  $scope.bJoined = false
 
   var config = {
     type: Phaser.AUTO,
@@ -71,7 +73,6 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
 
   function preload() {
     this.load.setBaseURL('http://127.0.0.1:8081');
-    // http-server Game/images --cors
     this.load.image('bottom_left', 'bl.png');
     this.load.image('bottom_right', 'br.png');
     this.load.image('upper_left', 'ul.png');
@@ -81,6 +82,14 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
     this.load.image('jigglypuff', 'jigglypuff.png');
     this.load.image('squirtle', 'squirtle.png');
     this.load.image('sky', 'gradient1.png');
+  }
+
+  $scope.joinATeam = function () {
+    console.log("vous avez rejoins A")
+  }
+  $scope.joinBTeam = function () {
+    console.log("vous avez rejoins B")
+
   }
 
   function create() {
