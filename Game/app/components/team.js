@@ -1,20 +1,27 @@
 mainApp.component('team', {
-  template: `
-          <div layout="column" layout-align="center center">
-              <div ng-repeat="player in $ctrl.players">
-                {{player}}
-              </div>
-              <div ng-if="$ctrl.players.length<2">
-                <md-button ng-click="$ctrl.addPlayer()" class="md-raised">Rejoindre</md-button>
-              </div>
-          </div>
-`,
-  controller: function teamCtrl() {
+  templateUrl: './app/components/views/team.html',
+  bindings: {
+    user: '=',
+  },
+  controller: function teamCtrl($mdDialog) {
     this.players = [];
+    this.showJoinButton = true
 
-    this.addPlayer = function() {
-      console.log($rootScope);
-      // this.players.push()
+    this.getInfo = function (player, $event) {
+
+      $mdDialog.show(
+        $mdDialog.alert()
+        .clickOutsideToClose(true)
+        .title('Joueur')
+        .textContent('Cette personne est le joueur ' + player.name)
+        .ok('Ok!')
+        .targetEvent($event)
+      );
+
+    }
+    this.addPlayer = () => {
+      this.players.push(this.user)
+      this.showJoinButton = false
     }
   }
 });

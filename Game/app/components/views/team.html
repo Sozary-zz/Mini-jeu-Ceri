@@ -1,0 +1,37 @@
+<div layout="column" layout-align="center center">
+  <div ng-repeat="player in $ctrl.players">
+    <div class="player-ico" ng-click="$ctrl.getInfo(player,$event)">
+      <img src="./images/{{player.avatar}}.png" alt="">
+    </div>
+  </div>
+  <div ng-if="$ctrl.players.length<2">
+    <md-button ng-click="$ctrl.addPlayer()" ng-disabled="!$ctrl.showJoinButton" class="md-raised">Rejoindre</md-button>
+  </div>
+</div>
+
+
+<style>
+  .player-ico {
+    border: 2px solid rgba(0, 0, 0, .4);
+    box-shadow: 0px 0px 0px black;
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgba(0, 0, 0, .7);
+    transition: all .3s linear;
+  }
+
+  .player-ico>img {
+    transition: all .3s linear;
+    transform: scale(.85);
+  }
+
+  .player-ico:hover {
+    cursor: pointer;
+    box-shadow: 0px 0px 5px black;
+  }
+
+  .player-ico:hover img {
+    transform: scale(1);
+  }
+
+</style>

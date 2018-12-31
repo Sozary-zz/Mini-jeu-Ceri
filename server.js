@@ -10,7 +10,7 @@ const http = require("http");
 // Declaration des variables
 const port = "8080";
 
-const server = http.createServer({}, app).listen(port, function() {
+const server = http.createServer({}, app).listen(port, function () {
   console.log(`App launched on ${port}`);
 });
 const io = require("socket.io")(server);
@@ -30,7 +30,7 @@ app.use("/modules", express.static(__dirname + "node_modules/"));
 app.use(express.static(__dirname + "/Game/public"))
 app.use(bodyParser.json())
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
   res.header(
@@ -39,10 +39,10 @@ app.use(function(req, res, next) {
   );
   next();
 });
-io.on('connection', function(socket) {
-  socket.on('new_connection', function(data) {
-    MongoClient.connect(mongoUrl, function(err, client) {  
-      client.db("cerigame").collection("players").count({}, function(error, numOfPlayers) {
+io.on('connection', function (socket) {
+  socket.on('new_connection', function (data) {
+    MongoClient.connect(mongoUrl, function (err, client) {
+      client.db("cerigame").collection("players").count({}, function (error, numOfPlayers) {
         if (error) throw error;
         if (numOfPlayers < 4)
           socket.emit("need_user_name")
@@ -55,26 +55,30 @@ io.on('connection', function(socket) {
   //   clients = clients.filter(id => id !== socket.id)
   // })
   socket.on("given_user", (data) => {
+    // the following mught be in the callback instead
     let newUser = {
       name: data.user,
       avatar: availableAvatar.splice(Math.floor(Math.random() * Math.floor(availableAvatar.length)), 1)[0]
     }
     gameRoom.push(newUser)
     //    actions with db then callback
-    MongoClient.connect(mongoUrl, function(err, client) {  
-      client.db("cerigame").collection("players").insertOne({
-        "username": data.user,
-      }, () => {
-        socket.emit("user_ok", newUser)
-      })
-    });         
+    MongoClient.connect(mongoUrl, function (err, client) {
+      console.log(availableAvatar)
+
+      socket.emit("user_ok", newUser)
+      // client.db("cerigame").collection("players").insertOne({
+      //   "username": data.user,
+      // }, () => {
+      //   socket.emit("user_ok", newUser)
+      // })
+    });
   })
-  socket.on('challenge', function(data) {
+  socket.on('challenge', function (data) {
     socket.broadcast.emit('newChallenge', data);
   });
 });
 
-app.post('/new', function(req, res) {
+app.post('/new', function (req, res) {
   // MongoClient.connect(mongoUrl, function(err, client) {       
   //   client.db("language").collection("polish").insertOne({
   //     "Polish": req.body.pl,
