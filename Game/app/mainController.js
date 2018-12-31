@@ -83,12 +83,13 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
     this.load.image('squirtle', 'squirtle.png');
     this.load.image('sky', 'gradient1.png');
   }
+  $scope.team = undefined
 
   $scope.joinATeam = function () {
-    console.log("vous avez rejoins A")
+    $scope.team = "a"
   }
   $scope.joinBTeam = function () {
-    console.log("vous avez rejoins B")
+    $scope.team = "b"
 
   }
 
