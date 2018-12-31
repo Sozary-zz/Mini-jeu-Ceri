@@ -1,6 +1,6 @@
 var mainApp = angular.module('mainApp', ["ngRoute", "ngMaterial", "ngAnimate"])
 
-mainApp.config(function($routeProvider) {
+mainApp.config(function ($routeProvider) {
   $routeProvider
     .when("/", {
       templateUrl: "views/home.html",
@@ -11,23 +11,23 @@ mainApp.config(function($routeProvider) {
       controller: "homeCtrl"
     })
 })
-mainApp.controller('menuCtrl', function($scope, $http, $location, $mdToast) {
+mainApp.controller('menuCtrl', function ($scope, $http, $location, $mdToast) {
   $scope.menuItems = [{
     caption: "Game",
     link: "#!/home"
   }]
 })
-mainApp.controller('indexCtrl', function($scope, $mdDialog, $http, $location, $mdToast) {
+mainApp.controller('indexCtrl', function ($scope, $mdDialog, $http, $location, $mdToast) {
   var self = this
-  $scope.tooMuchUser = function() {
+  $scope.tooMuchUser = function () {
     var confirm = $mdDialog.alert()
       .clickOutsideToClose(false)
       .title('Une erreur est survenue')
       .textContent('Trop de joueurs sont connectés simultanément, veuillez revenir plus tard.')
       .ok('Ça marche!')
-    $mdDialog.show(confirm).then(function() {}, function() {});
+    $mdDialog.show(confirm).then(function () {}, function () {});
   }
-  $scope.promptUsername = function() {
+  $scope.promptUsername = function () {
     var confirm = $mdDialog.prompt()
       .title('Identifiant')
       .textContent('Quel identifiant voulez-vous choisir pour ce jeu?')
@@ -36,18 +36,18 @@ mainApp.controller('indexCtrl', function($scope, $mdDialog, $http, $location, $m
       .ok('Valider')
       .cancel('Je suis anonyme!')
 
-    $mdDialog.show(confirm).then(function(result) {
+    $mdDialog.show(confirm).then(function (result) {
       socket.emit("given_user", {
         user: result
       })
-    }, function() {
+    }, function () {
       window.location.href = "http://localhost:8080/"
 
     });
   }
 })
 
-mainApp.controller('homeCtrl', function($scope, $http, $location, $mdSidenav, $mdToast) {
+mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $mdToast) {
   $scope.toggleSidenav = buildToggler('closeEventsDisabled');
   $scope.user = {}
   socket.on('user_ok', (data) => {
@@ -56,7 +56,7 @@ mainApp.controller('homeCtrl', function($scope, $http, $location, $mdSidenav, $m
   });
 
   var config = {
-    type: Phaser.AUTO,
+    type: Phaser.AUTO, //d
     width: $(window).width() * .7,
     parent: 'game-app',
     height: $(window).width() * .4,
@@ -90,7 +90,7 @@ mainApp.controller('homeCtrl', function($scope, $http, $location, $mdSidenav, $m
   function update() {}
 
   function buildToggler(componentId) {
-    return function() {
+    return function () {
       $mdSidenav(componentId).toggle();
     };
   }
