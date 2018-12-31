@@ -56,7 +56,7 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
   });
 
   var config = {
-    type: Phaser.AUTO, //d
+    type: Phaser.AUTO,
     width: $(window).width() * .7,
     parent: 'game-app',
     height: $(window).width() * .4,
