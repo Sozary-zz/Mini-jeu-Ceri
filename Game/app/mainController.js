@@ -1,6 +1,6 @@
 var mainApp = angular.module('mainApp', ["ngRoute", "ngMaterial", "ngAnimate"])
 
-mainApp.config(function ($routeProvider) {
+mainApp.config(function($routeProvider) {
   $routeProvider
     .when("/", {
       templateUrl: "views/home.html",
@@ -11,23 +11,23 @@ mainApp.config(function ($routeProvider) {
       controller: "homeCtrl"
     })
 })
-mainApp.controller('menuCtrl', function ($scope, $http, $location, $mdToast) {
+mainApp.controller('menuCtrl', function($scope, $http, $location, $mdToast) {
   $scope.menuItems = [{
     caption: "Game",
     link: "#!/home"
   }]
 })
-mainApp.controller('indexCtrl', function ($scope, $mdDialog, $http, $location, $mdToast) {
+mainApp.controller('indexCtrl', function($scope, $mdDialog, $http, $location, $mdToast) {
   var self = this
-  $scope.tooMuchUser = function () {
+  $scope.tooMuchUser = function() {
     var confirm = $mdDialog.alert()
       .clickOutsideToClose(false)
       .title('Une erreur est survenue')
       .textContent('Trop de joueurs sont connectés simultanément, veuillez revenir plus tard.')
       .ok('Ça marche!')
-    $mdDialog.show(confirm).then(function () {}, function () {});
+    $mdDialog.show(confirm).then(function() {}, function() {});
   }
-  $scope.promptUsername = function () {
+  $scope.promptUsername = function() {
     var confirm = $mdDialog.prompt()
       .title('Identifiant')
       .textContent('Quel identifiant voulez-vous choisir pour ce jeu?')
@@ -36,23 +36,27 @@ mainApp.controller('indexCtrl', function ($scope, $mdDialog, $http, $location, $
       .ok('Valider')
       .cancel('Je suis anonyme!')
 
-    $mdDialog.show(confirm).then(function (result) {
+    $mdDialog.show(confirm).then(function(result) {
       socket.emit("given_user", {
         user: result
       })
-    }, function () {
+    }, function() {
       window.location.href = "http://localhost:8080/"
 
     });
   }
 })
 
-mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $mdToast) {
+mainApp.controller('homeCtrl', function($scope, $http, $location, $mdSidenav, $mdToast) {
   $scope.toggleSidenav = buildToggler('closeEventsDisabled');
   $scope.user = {}
   socket.on('user_ok', (data) => {
     $scope.user = data;
     $scope.$apply();
+  });
+  socket.on('user_check', (data) => {
+    // if($scope.user.id===data.id)
+    console.log(data);
   });
   $scope.aJoined = false
   $scope.bJoined = false
@@ -68,7 +72,6 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
       update: update
     }
   };
-  console.log();
   var game = new Phaser.Game(config);
 
   function preload() {
@@ -85,10 +88,10 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
   }
   $scope.team = undefined
 
-  $scope.joinATeam = function () {
+  $scope.joinATeam = function() {
     $scope.team = "a"
   }
-  $scope.joinBTeam = function () {
+  $scope.joinBTeam = function() {
     $scope.team = "b"
 
   }
@@ -100,7 +103,7 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
   function update() {}
 
   function buildToggler(componentId) {
-    return function () {
+    return function() {
       $mdSidenav(componentId).toggle();
     };
   }
