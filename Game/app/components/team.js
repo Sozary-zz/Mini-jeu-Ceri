@@ -1,7 +1,7 @@
 mainApp.component('team', {
   templateUrl: './app/components/views/team.html',
   bindings: {
-    user: '=',
+    users: '=',
     joined: '=',
     onJoin: '&',
     currentTeam: '@',

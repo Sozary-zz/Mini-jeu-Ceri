@@ -10,7 +10,7 @@ const http = require("http");
 // Declaration des variables
 const port = "8080";
 
-const server = http.createServer({}, app).listen(port, function() {
+const server = http.createServer({}, app).listen(port, function () {
   console.log(`App launched on ${port}`);
 });
 const io = require("socket.io")(server);
@@ -22,16 +22,20 @@ var availableAvatar = [
   "eevee"
 ]
 
-// function used to generate an id for each client
-function guid() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
+var ping = setInterval(() => {
+    for (let i = 0; i < gameRoom.length; i++) {
+      let found = false
+      for (let client in io.sockets.clients().connected)
+        if (gameRoom[i].id === client)
+          found = true
+      if (!found) { // user left 
+        io.sockets.emit('user_left', gameRoom[i].id);
+        gameRoom.splice(i, 1)
+      }
 
+    }
+  },
+  1000)
 
 app.use("/css", express.static(__dirname + "/Game/css"));
 app.use("/images", express.static(__dirname + "/Game/images"));
@@ -41,7 +45,7 @@ app.use("/modules", express.static(__dirname + "node_modules/"));
 app.use(express.static(__dirname + "/Game/public"))
 app.use(bodyParser.json())
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
   res.header(
@@ -50,10 +54,10 @@ app.use(function(req, res, next) {
   );
   next();
 });
-io.on('connection', function(socket) {
-  socket.on('new_connection', function(data) {
-    MongoClient.connect(mongoUrl, function(err, client) {
-      client.db("cerigame").collection("players").count({}, function(error, numOfPlayers) {
+io.on('connection', function (socket) {
+  socket.on('new_connection', function (data) {
+    MongoClient.connect(mongoUrl, function (err, client) {
+      client.db("cerigame").collection("players").count({}, function (error, numOfPlayers) {
         if (error) throw error;
         if (numOfPlayers < 4)
           socket.emit("need_user_name")
@@ -70,20 +74,11 @@ io.on('connection', function(socket) {
     let newUser = {
       name: data.user,
       avatar: availableAvatar.splice(Math.floor(Math.random() * Math.floor(availableAvatar.length)), 1)[0],
-      available: true,
-      id: guid(),
-      ping: setInterval(() => {
-        // var self = this
-        // socket.emit("user_check", {
-        //   id: self.id
-        // })
-        console.log(" tests");
-      }, 1000)
+      id: socket.id,
     }
     gameRoom.push(newUser)
-    console.log(gameRoom);
     //    actions with db then callback
-    MongoClient.connect(mongoUrl, function(err, client) {
+    MongoClient.connect(mongoUrl, function (err, client) {
       console.log(availableAvatar)
 
       socket.emit("user_ok", newUser)
@@ -94,12 +89,12 @@ io.on('connection', function(socket) {
       // })
     });
   })
-  socket.on('challenge', function(data) {
+  socket.on('challenge', function (data) {
     socket.broadcast.emit('newChallenge', data);
   });
 });
 
-app.post('/new', function(req, res) {
+app.post('/new', function (req, res) {
   // MongoClient.connect(mongoUrl, function(err, client) {       
   //   client.db("language").collection("polish").insertOne({
   //     "Polish": req.body.pl,
