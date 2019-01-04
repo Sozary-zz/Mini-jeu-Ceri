@@ -15,12 +15,36 @@ const server = http.createServer({}, app).listen(port, function () {
 });
 const io = require("socket.io")(server);
 var gameRoom = []
-var availableAvatar = [
-  "jigglypuff",
-  "pikachu",
-  "squirtle",
-  "eevee"
+var availableAvatar = [{
+    name: "jigglypuff",
+    used: false
+  },
+  {
+    name: "pikachu",
+    used: false
+  },
+  {
+    name: "squirtle",
+    used: false
+  },
+  {
+    name: "eevee",
+    used: false
+  },
 ]
+
+var getAvatar = () => {
+  let index
+  do {
+    index = Math.floor(Math.random() * Math.floor(availableAvatar.length))
+    if (!availableAvatar[index].used) {
+      availableAvatar[index].used = true
+      return availableAvatar[index].name
+    }
+  }
+  while (1);
+}
+
 
 var ping = setInterval(() => {
     for (let i = 0; i < gameRoom.length; i++) {
@@ -55,43 +79,37 @@ app.use(function (req, res, next) {
   next();
 });
 io.on('connection', function (socket) {
+  socket.on('disconnect', function () {
+    for (let i = 0; i < gameRoom.length; i++) {
+      if (gameRoom[i].id === socket.id) {
+        io.sockets.emit('user_left', gameRoom[i].id);
+        gameRoom.splice(i, 1)
+        return
+      }
+    }
+  })
   socket.on('new_connection', function (data) {
-    MongoClient.connect(mongoUrl, function (err, client) {
-      client.db("cerigame").collection("players").count({}, function (error, numOfPlayers) {
-        if (error) throw error;
-        if (numOfPlayers < 4)
-          socket.emit("need_user_name")
-        else
-          socket.emit("too_much_user")
-      })
-    })
+    if (gameRoom.length < 4)
+      socket.emit("need_user_name")
+    else
+      socket.emit("too_much_user")
   });
-  // socket.on('disconnect', () => {
-  //   clients = clients.filter(id => id !== socket.id)
-  // })
   socket.on("given_user", (data) => {
-    // the following mught be in the callback instead
+
     let newUser = {
       name: data.user,
-      avatar: availableAvatar.splice(Math.floor(Math.random() * Math.floor(availableAvatar.length)), 1)[0],
+      avatar: getAvatar(),
       id: socket.id,
     }
     gameRoom.push(newUser)
-    //    actions with db then callback
-    MongoClient.connect(mongoUrl, function (err, client) {
-      console.log(availableAvatar)
+    socket.broadcast.emit('new_user', newUser);
 
-      socket.emit("user_ok", newUser)
-      // client.db("cerigame").collection("players").insertOne({
-      //   "username": data.user,
-      // }, () => {
-      //   socket.emit("user_ok", newUser)
-      // })
-    });
+    socket.emit("user_ok", {
+      current: newUser,
+      existing: gameRoom
+    })
+
   })
-  socket.on('challenge', function (data) {
-    socket.broadcast.emit('newChallenge', data);
-  });
 });
 
 app.post('/new', function (req, res) {

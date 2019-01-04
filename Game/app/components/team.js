@@ -1,7 +1,7 @@
 mainApp.component('team', {
   templateUrl: './app/components/views/team.html',
   bindings: {
-    users: '=',
+    user: '<',
     joined: '=',
     onJoin: '&',
     currentTeam: '@',
@@ -12,14 +12,18 @@ mainApp.component('team', {
     this.showJoinButton = true
 
     this.$onChanges = function (changes) {
-      if (changes.team.previousValue === undefined)
-        return
-      this.showJoinButton = !(changes.team.currentValue === this.currentTeam)
 
-      if (changes.team.currentValue !== this.currentTeam && changes.team.currentValue !== changes.team.previousValue)
-        for (let i = 0; i < this.players.length; i++)
-          if (this.players[i].name === this.user.name)
-            this.players.splice(i, 1)
+
+      if (changes.team !== undefined) {
+        if (changes.team.previousValue === undefined)
+          return
+        this.showJoinButton = !(changes.team.currentValue === this.currentTeam)
+
+        if (changes.team.currentValue !== this.currentTeam && changes.team.currentValue !== changes.team.previousValue)
+          for (let i = 0; i < this.players.length; i++)
+            if (this.players[i].name === this.user.name)
+              this.players.splice(i, 1)
+      }
     }
 
     this.getInfo = function (player, $event) {

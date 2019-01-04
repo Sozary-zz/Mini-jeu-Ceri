@@ -16,18 +16,18 @@
     <h4>{{users[id].name}}</h4>
   </div>
   <div layout="row" layout-align="center center">
-    <img src="./images/{{user.avatar}}.png" alt="">
+    <img src="./images/{{users[id].avatar}}.png" alt="">
   </div>
   <div layout="row" layout-align="center center">
     <div flex="20">
-      <team user="users" on-join="joinATeam()" joined="aJoined" team="team" current-team="a">
+      <team user="users[id]" on-join="joinATeam()" joined="aJoined" team="team" current-team="a">
       </team>
     </div>
     <div flex="60">
       <div id="game-app"></div>
     </div>
     <div flex="20">
-      <team user="users" on-join="joinBTeam()" joined="bJoined" team="team" current-team="b"></team>
+      <team user="users[id]" on-join="joinBTeam()" joined="bJoined" team="team" current-team="b"></team>
     </div>
   </div>
 </md-content>

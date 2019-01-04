@@ -50,17 +50,47 @@ mainApp.controller('indexCtrl', function ($scope, $mdDialog, $http, $location, $
 mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $mdToast) {
   $scope.toggleSidenav = buildToggler('closeEventsDisabled');
   $scope.id
+  $scope.numberOfPlayers = 0
   $scope.users = {}
   socket.on('user_ok', (data) => {
-    $scope.users[data.id] = data
-    $scope.id = data.id
+
+    $scope.numberOfPlayers++
+    $scope.users[data.current.id] = {
+      name: data.current.name,
+      avatar: data.current.avatar,
+      team: undefined
+    }
+    $scope.id = data.current.id
+
+    for (let i = 0; i < data.existing.length; i++) {
+      $scope.numberOfPlayers++
+      $scope.users[data.existing[i].id] = {
+        name: data.existing[i].name,
+        avatar: data.existing[i].avatar,
+        team: undefined
+      }
+    }
+
     $scope.$apply();
   });
 
   socket.on('user_left', (user_id) => {
+
     for (let user in $scope.users)
-      if (user === user_id)
+      if (user === user_id) {
+        $scope.numberOfPlayers--
         delete $scope.users[user]
+      }
+  });
+
+  socket.on('new_user', (user) => {
+    $scope.numberOfPlayers++
+    $scope.users[user.id] = {
+      name: user.name,
+      avatar: user.avatar,
+      team: undefined
+    }
+    $scope.$apply();
   });
 
 
