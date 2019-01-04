@@ -57,12 +57,12 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
   socket.on('user_ok', (data) => {
 
     $scope.numberOfPlayers++
-    $scope.users[data.current.id] = {
-      name: data.current.name,
-      avatar: data.current.avatar,
-      team: undefined,
-      lastTeam: undefined,
-    }
+    // $scope.users[data.current.id] = {
+    //   name: data.current.name,
+    //   avatar: data.current.avatar,
+    //   team: undefined,
+    //   lastTeam: undefined,
+    // }
     $scope.id = data.current.id
 
     for (let i = 0; i < data.existing.length; i++) {

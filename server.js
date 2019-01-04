@@ -73,6 +73,11 @@ app.use(function (req, res, next) {
   next();
 });
 io.on('connection', function (socket) {
+  if (gameRoom.length < 4)
+    socket.emit("need_user_name")
+  else
+    socket.emit("too_much_user")
+
   socket.on("joined_a", (data) => {
     changeTeam("a", data.user_id)
     socket.broadcast.emit('user_joined_a', data);
@@ -90,12 +95,7 @@ io.on('connection', function (socket) {
       }
     }
   })
-  socket.on('new_connection', function (data) {
-    if (gameRoom.length < 4)
-      socket.emit("need_user_name")
-    else
-      socket.emit("too_much_user")
-  });
+
   socket.on("given_user", (data) => {
 
     let newUser = {

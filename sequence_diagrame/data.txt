@@ -1,0 +1,21 @@
+title Mini-jeu Ceri
+
+Client 1->Server: connection
+alt gameRoom.length<4
+Server->Client 1: need_user_name
+rbox over Client 1:mdDialog prompt user's name 
+Client 1->Server:given_user ({username})
+rbox over Server: create a new user
+rbox over Server: push it into gameRoom
+Server->Client n \ {1}: user_ok ({newUser})
+rbox over Client n \ {1}: increase the number of players
+rbox over Client n \ {1}: insert the new user in the user list
+Server->Client 1: user_ok ({newUser,gameRoom})
+rbox over Client 1: increase the number of players
+rbox over Client 1: insert the new user
+rbox over Client 1: save the id of this new user in the scope
+rbox over Client 1: add all the other players that are in gameRoom
+else else
+Server->Client 1: too_much_user
+rbox over Client 1:mdDialog too much users
+end
