@@ -46,20 +46,13 @@ var getAvatar = () => {
 }
 
 
-var ping = setInterval(() => {
-    for (let i = 0; i < gameRoom.length; i++) {
-      let found = false
-      for (let client in io.sockets.clients().connected)
-        if (gameRoom[i].id === client)
-          found = true
-      if (!found) { // user left 
-        io.sockets.emit('user_left', gameRoom[i].id);
-        gameRoom.splice(i, 1)
-      }
-
+var changeTeam = (team, id) => {
+  for (let i = 0; i < gameRoom.length; i++)
+    if (gameRoom[i].id === id) {
+      gameRoom[i].team = team
+      return
     }
-  },
-  1000)
+}
 
 app.use("/css", express.static(__dirname + "/Game/css"));
 app.use("/images", express.static(__dirname + "/Game/images"));
@@ -79,6 +72,14 @@ app.use(function (req, res, next) {
   next();
 });
 io.on('connection', function (socket) {
+  socket.on("joined_a", (data) => {
+    changeTeam("a", data.user_id)
+    socket.broadcast.emit('user_joined_a', data);
+  })
+  socket.on("joined_b", (data) => {
+    changeTeam("b", data.user_id)
+    socket.broadcast.emit('user_joined_b', data);
+  })
   socket.on('disconnect', function () {
     for (let i = 0; i < gameRoom.length; i++) {
       if (gameRoom[i].id === socket.id) {
@@ -100,6 +101,7 @@ io.on('connection', function (socket) {
       name: data.user,
       avatar: getAvatar(),
       id: socket.id,
+      team: undefined
     }
     gameRoom.push(newUser)
     socket.broadcast.emit('new_user', newUser);

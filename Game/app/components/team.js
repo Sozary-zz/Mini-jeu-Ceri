@@ -4,8 +4,10 @@ mainApp.component('team', {
     user: '<',
     joined: '=',
     onJoin: '&',
+    resetTmp: '&',
     currentTeam: '@',
     team: '<',
+    tempUser: '<',
   },
   controller: function teamCtrl($mdDialog) {
     this.players = [];
@@ -13,6 +15,15 @@ mainApp.component('team', {
 
     this.$onChanges = function (changes) {
 
+      if (changes.tempUser !== undefined && changes.tempUser.currentValue !== undefined) {
+        if (changes.tempUser.currentValue.team === this.currentTeam) {
+          this.players.push(changes.tempUser.currentValue)
+
+          this.resetTmp()
+        } else if (changes.tempUser.previousValue === this.currentTeam) {
+          // remove the user from player list
+        }
+      }
 
       if (changes.team !== undefined) {
         if (changes.team.previousValue === undefined)

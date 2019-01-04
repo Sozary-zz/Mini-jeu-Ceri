@@ -50,8 +50,13 @@ mainApp.controller('indexCtrl', function ($scope, $mdDialog, $http, $location, $
 mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $mdToast) {
   $scope.toggleSidenav = buildToggler('closeEventsDisabled');
   $scope.id
+  $scope.tmpUsr = undefined
   $scope.numberOfPlayers = 0
   $scope.users = {}
+
+  $scope.resetTmp = function () {
+    $scope.tmpUsr = undefined
+  }
   socket.on('user_ok', (data) => {
 
     $scope.numberOfPlayers++
@@ -75,12 +80,22 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
   });
 
   socket.on('user_left', (user_id) => {
-
     for (let user in $scope.users)
       if (user === user_id) {
         $scope.numberOfPlayers--
         delete $scope.users[user]
       }
+  });
+  socket.on('user_joined_a', (user) => {
+    $scope.users[user.user_id].team = "a"
+    $scope.tmpUsr = $scope.users[user.user_id]
+    $scope.$apply();
+  });
+  socket.on('user_joined_b', (user) => {
+
+    $scope.users[user.user_id].team = "b"
+    $scope.tmpUsr = $scope.users[user.user_id]
+    $scope.$apply();
   });
 
   socket.on('new_user', (user) => {
@@ -125,9 +140,16 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
   $scope.team = undefined
 
   $scope.joinATeam = function () {
+    socket.emit('joined_a', {
+      user_id: $scope.id
+    })
+
     $scope.team = "a"
   }
   $scope.joinBTeam = function () {
+    socket.emit('joined_b', {
+      user_id: $scope.id
+    })
     $scope.team = "b"
 
   }
