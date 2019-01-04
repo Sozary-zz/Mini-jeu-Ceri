@@ -54,10 +54,7 @@ var changeTeam = (team, id) => {
       return
     }
 }
-setInterval(() => {
-  console.log(gameRoom);
 
-}, 2000)
 app.use("/css", express.static(__dirname + "/Game/css"));
 app.use("/images", express.static(__dirname + "/Game/images"));
 app.use("/scripts", express.static(__dirname + "/Game/scripts"));
