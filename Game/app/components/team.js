@@ -16,13 +16,18 @@ mainApp.component('team', {
     this.$onChanges = function (changes) {
 
       if (changes.tempUser !== undefined && changes.tempUser.currentValue !== undefined) {
+
         if (changes.tempUser.currentValue.team === this.currentTeam) {
           this.players.push(changes.tempUser.currentValue)
 
-          this.resetTmp()
-        } else if (changes.tempUser.previousValue === this.currentTeam) {
-          // remove the user from player list
+        } else if (changes.tempUser.currentValue.lastTeam === this.currentTeam) {
+
+          for (let i = 0; i < this.players.length; i++)
+            if (this.players[i].id === changes.tempUser.currentValue.id)
+              this.players.splice(i, 1)
+
         }
+        return
       }
 
       if (changes.team !== undefined) {

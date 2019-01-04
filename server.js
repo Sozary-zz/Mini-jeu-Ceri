@@ -49,11 +49,15 @@ var getAvatar = () => {
 var changeTeam = (team, id) => {
   for (let i = 0; i < gameRoom.length; i++)
     if (gameRoom[i].id === id) {
+      gameRoom[i].lastTeam = gameRoom[i].team
       gameRoom[i].team = team
       return
     }
 }
+setInterval(() => {
+  console.log(gameRoom);
 
+}, 2000)
 app.use("/css", express.static(__dirname + "/Game/css"));
 app.use("/images", express.static(__dirname + "/Game/images"));
 app.use("/scripts", express.static(__dirname + "/Game/scripts"));
@@ -101,9 +105,11 @@ io.on('connection', function (socket) {
       name: data.user,
       avatar: getAvatar(),
       id: socket.id,
-      team: undefined
+      team: undefined,
+      lastTeam: undefined
     }
     gameRoom.push(newUser)
+
     socket.broadcast.emit('new_user', newUser);
 
     socket.emit("user_ok", {

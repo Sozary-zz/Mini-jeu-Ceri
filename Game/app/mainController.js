@@ -54,16 +54,14 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
   $scope.numberOfPlayers = 0
   $scope.users = {}
 
-  $scope.resetTmp = function () {
-    $scope.tmpUsr = undefined
-  }
   socket.on('user_ok', (data) => {
 
     $scope.numberOfPlayers++
     $scope.users[data.current.id] = {
       name: data.current.name,
       avatar: data.current.avatar,
-      team: undefined
+      team: undefined,
+      lastTeam: undefined,
     }
     $scope.id = data.current.id
 
@@ -72,7 +70,8 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
       $scope.users[data.existing[i].id] = {
         name: data.existing[i].name,
         avatar: data.existing[i].avatar,
-        team: undefined
+        team: data.existing[i].team,
+        lastTeam: data.existing[i].lastTeam,
       }
     }
 
@@ -87,14 +86,18 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
       }
   });
   socket.on('user_joined_a', (user) => {
+
+    $scope.users[user.user_id].lastTeam = $scope.users[user.user_id].team
     $scope.users[user.user_id].team = "a"
-    $scope.tmpUsr = $scope.users[user.user_id]
+    $scope.tmpUsr = { ...$scope.users[user.user_id]
+    }
     $scope.$apply();
   });
   socket.on('user_joined_b', (user) => {
-
+    $scope.users[user.user_id].lastTeam = $scope.users[user.user_id].team
     $scope.users[user.user_id].team = "b"
-    $scope.tmpUsr = $scope.users[user.user_id]
+    $scope.tmpUsr = { ...$scope.users[user.user_id]
+    }
     $scope.$apply();
   });
 
@@ -103,7 +106,8 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
     $scope.users[user.id] = {
       name: user.name,
       avatar: user.avatar,
-      team: undefined
+      team: undefined,
+      lastTeam: undefined,
     }
     $scope.$apply();
   });
