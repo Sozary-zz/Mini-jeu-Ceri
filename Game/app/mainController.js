@@ -1,6 +1,6 @@
 var mainApp = angular.module('mainApp', ["ngRoute", "ngMaterial", "ngAnimate"])
 
-mainApp.config(function ($routeProvider) {
+mainApp.config(function($routeProvider) {
   $routeProvider
     .when("/", {
       templateUrl: "views/home.html",
@@ -11,23 +11,23 @@ mainApp.config(function ($routeProvider) {
       controller: "homeCtrl"
     })
 })
-mainApp.controller('menuCtrl', function ($scope, $http, $location, $mdToast) {
+mainApp.controller('menuCtrl', function($scope, $http, $location, $mdToast) {
   $scope.menuItems = [{
     caption: "Game",
     link: "#!/home"
   }]
 })
-mainApp.controller('indexCtrl', function ($scope, $mdDialog, $http, $location, $mdToast) {
+mainApp.controller('indexCtrl', function($scope, $mdDialog, $http, $location, $mdToast) {
   var self = this
-  $scope.tooMuchUser = function () {
+  $scope.tooMuchUser = function() {
     var confirm = $mdDialog.alert()
       .clickOutsideToClose(false)
       .title('Une erreur est survenue')
       .textContent('Trop de joueurs sont connectés simultanément, veuillez revenir plus tard.')
       .ok('Ça marche!')
-    $mdDialog.show(confirm).then(function () {}, function () {});
+    $mdDialog.show(confirm).then(function() {}, function() {});
   }
-  $scope.promptUsername = function () {
+  $scope.promptUsername = function() {
     var confirm = $mdDialog.prompt()
       .title('Identifiant')
       .textContent('Quel identifiant voulez-vous choisir pour ce jeu?')
@@ -36,27 +36,25 @@ mainApp.controller('indexCtrl', function ($scope, $mdDialog, $http, $location, $
       .ok('Valider')
       .cancel('Je suis anonyme!')
 
-    $mdDialog.show(confirm).then(function (result) {
+    $mdDialog.show(confirm).then(function(result) {
       socket.emit("given_user", {
         user: result
       })
-    }, function () {
+    }, function() {
       window.location.href = "http://localhost:8080/"
 
     });
   }
 })
 
-mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $mdToast) {
+mainApp.controller('homeCtrl', function($scope, $http, $location, $mdSidenav, $mdToast) {
   $scope.toggleSidenav = buildToggler('closeEventsDisabled');
   $scope.id
   $scope.tmpUsr = undefined
-  $scope.numberOfPlayers = 0
   $scope.users = {}
 
   socket.on('user_ok', (data) => {
 
-    $scope.numberOfPlayers++
     // $scope.users[data.current.id] = {
     //   name: data.current.name,
     //   avatar: data.current.avatar,
@@ -66,7 +64,6 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
     $scope.id = data.current.id
 
     for (let i = 0; i < data.existing.length; i++) {
-      $scope.numberOfPlayers++
       $scope.users[data.existing[i].id] = {
         name: data.existing[i].name,
         avatar: data.existing[i].avatar,
@@ -81,7 +78,6 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
   socket.on('user_left', (user_id) => {
     for (let user in $scope.users)
       if (user === user_id) {
-        $scope.numberOfPlayers--
         delete $scope.users[user]
       }
   });
@@ -102,7 +98,6 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
   });
 
   socket.on('new_user', (user) => {
-    $scope.numberOfPlayers++
     $scope.users[user.id] = {
       name: user.name,
       avatar: user.avatar,
@@ -143,14 +138,14 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
   }
   $scope.team = undefined
 
-  $scope.joinATeam = function () {
+  $scope.joinATeam = function() {
     socket.emit('joined_a', {
       user_id: $scope.id
     })
 
     $scope.team = "a"
   }
-  $scope.joinBTeam = function () {
+  $scope.joinBTeam = function() {
     socket.emit('joined_b', {
       user_id: $scope.id
     })
@@ -165,7 +160,7 @@ mainApp.controller('homeCtrl', function ($scope, $http, $location, $mdSidenav, $
   function update() {}
 
   function buildToggler(componentId) {
-    return function () {
+    return function() {
       $mdSidenav(componentId).toggle();
     };
   }
